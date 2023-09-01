@@ -1,17 +1,19 @@
 const express = require('express')
 const dotenv = require('dotenv')
-var bodyParser = require('body-parser')
 const mysql = require('mysql2');
+const bodyParser = require('body-parser')
 
 const app = express()
-dotenv.config({ path: `.env.${process.env.NODE_ENV || 'local'}` })
+const env = process.env
 
-const port = process.env.PORT
+dotenv.config({ path: `.env.${env.NODE_ENV || 'local'}` })
+
+const port = env.PORT
 const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_DATABASE
+  host: env.DB_HOST,
+  user: env.DB_USER,
+  password: env.DB_PASS,
+  database: env.DB_DATABASE
 });
 
 app.use(bodyParser.urlencoded({
@@ -21,36 +23,30 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
-  res.send('Backend Wesley José Santos Rodando...')
+  res.send(`Backend Wesley José Santos Rodando... (v${env.VERSION})`)
 })
 
 app.post('/cliente', (req, res) => {
   var user = req.body
-  var sql = `insert into 
-    cliente(
-      nome, 
-      sobrenome, 
-      email, 
-      salario, 
-      data_cadastro)
-    values(
-      "${user.nome}", 
-      "${user.sobrenome}", 
-      "${user.email}" 
-      "${user.salario}", 
-      "${(new Date()).toISOString()}"
-    )`
+  var date = (new Date()).toISOString().split("T")[0]
+  var sql = `insert into cliente
+    (nome,
+    sobrenome,
+    email,
+    data_cadastro,
+    salario)
+    values
+    ('${user.nome}',
+     '${user.sobrenome}',
+     '${user.email}',
+     '${date}',
+      ${user.salario});`
   connection.query(
     sql, function (err, results, fields) {
-      if(err) console.error(err)
-      res.send(results)
+      if(err) res.status(500).send(err)
+      else res.send(results)
     }
   )
-});
-
-app.delete('/cliente/:id', (req, res) => {
-  var sql = 'select * from cliente';
-  res.send(req.body);
 });
 
 app.get('/cliente', (req, res) => {
@@ -58,23 +54,51 @@ app.get('/cliente', (req, res) => {
   connection.query(
     sql,
     function (err, results, fields) {
-      if(err) console.error(err)
-      res.send(results)
+      if(err) res.status(500).send(err)
+      else res.send(results)
     }
   );
 })
 
 app.get('/cliente/:id', (req, res) => {
   var id = req.params.id
-  var sql = `select * from cliente where id_cliente = ${id}`;
+  var sql = `select * from cliente where (id_cliente = ${id})`;
   connection.query(
     sql, (err, results, fields) => {
-      if(err) console.error(err)
-      res.send(results)
+      if(err) res.status(500).send(err)
+      else res.send(results)
+    }
+  )
+});
+
+app.patch('/cliente/:id', (req, res) => {
+  var id = req.params.id
+  var user = req.body
+  var sql = `update cliente set
+  nome = '${user.nome}',
+  sobrenome = '${user.sobrenome}',
+  email = '${user.email}',
+  salario = ${user.salario}
+  where (id_cliente = ${id});`
+  connection.query(
+    sql, function (err, results, fields) {
+      if(err) res.status(500).send(err)
+      else res.send(results)
+    }
+  )
+});
+
+app.delete('/cliente/:id', (req, res) => {
+  var id = req.params.id
+  var sql = `delete from cliente where (id_cliente = ${id});`;
+  connection.query(
+    sql, function (err, results, fields) {
+      if(err) res.status(500).send(err)
+      else res.send(results)
     }
   )
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Backend listening on port ${port}`)
 })
