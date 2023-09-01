@@ -10,4 +10,9 @@ All notable changes to this project will be documented in this file.
 [0.2.0] - 2023-09-01
 
 # Changed
- - Basic CRUD implementation
+ - Implement 'client' CRUD
+
+[0.3.0] - 2023-09-01
+
+# Changed
+ - Implement 'fornecedor' CRUD

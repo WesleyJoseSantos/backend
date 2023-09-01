@@ -27,3 +27,22 @@ database: "aulas_web"
 ## v0.2.0
 
 Implementar rotas para operações CRUD
+
+## v0.3.0
+
+A seguinte tabela foi inserida em nossa base de dados online:
+
+CREATE TABLE `fornecedor` (
+  `id_fornecedor` int(11) NOT NULL AUTO_INCREMENT,
+  `razao` varchar(100) NOT NULL,
+  `cpf_cnpj` varchar(45) NOT NULL,
+  `contato` varchar(45) NOT NULL,
+  `logradouro` varchar(100) DEFAULT NULL,
+  `cidade` varchar(45) DEFAULT NULL,
+  `uf` varchar(2) DEFAULT NULL,
+  PRIMARY KEY (`id_fornecedor`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+Todo fornecedor deverá enviar sua logomarca junto com o cadastro.
+ 
+Você deverá desenvolver o CRUD para esta tabela e subir a sua aplicação no github.
