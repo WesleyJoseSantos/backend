@@ -1,30 +1,101 @@
 const express = require('express')
 const mysql = require('mysql2');
+const bodyParser = require('body-parser');
+const env = require('./env_prod.js');
 
 const app = express()
-const port = 3014
+
+const port = env.PORT
 const connection = mysql.createConnection({
-  host: 'aulascefet.c8tuthxylqic.sa-east-1.rds.amazonaws.com',
-  user: 'aluno',
-  password: 'alunoc3f3t',
-  database: 'aulas_web'
+  host: env.DB_HOST,
+  user: env.DB_USER,
+  password: env.DB_PASS,
+  database: env.DB_DATABASE
 });
 
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+app.use(bodyParser.json())
+
 app.get('/', (req, res) => {
-  res.send('Backend Wesley José Santos Rodando...')
+  res.send(`Backend Wesley José Santos Rodando... (v${env.VERSION}-${env.ENV})`)
 })
 
-app.get('/cliente', (req, res) => {
+app.post('/cliente', (req, res) => {
+  var user = req.body
+  var date = (new Date()).toISOString().split("T")[0]
+  var sql = `insert into cliente
+    (nome,
+    sobrenome,
+    email,
+    data_cadastro,
+    salario)
+    values
+    ('${user.nome}',
+     '${user.sobrenome}',
+     '${user.email}',
+     '${date}',
+      ${user.salario});`
   connection.query(
-    'SELECT * FROM `cliente`',
+    sql, function (err, results, fields) {
+      if(err) res.status(500).send(err)
+      else res.send(results)
+    }
+  )
+});
+
+app.get('/cliente', (req, res) => {
+  var sql = 'select * from cliente';
+  connection.query(
+    sql,
     function (err, results, fields) {
-      console.log(results); // results contains rows returned by server
-      console.log(fields); // fields contains extra meta data about results, if available
-      res.send(JSON.stringify(results))
+      if(err) res.status(500).send(err)
+      else res.send(results)
     }
   );
 })
 
+app.get('/cliente/:id', (req, res) => {
+  var id = req.params.id
+  var sql = `select * from cliente where (id_cliente = ${id})`;
+  connection.query(
+    sql, (err, results, fields) => {
+      if(err) res.status(500).send(err)
+      else res.send(results)
+    }
+  )
+});
+
+app.patch('/cliente/:id', (req, res) => {
+  var id = req.params.id
+  var user = req.body
+  var sql = `update cliente set
+  nome = '${user.nome}',
+  sobrenome = '${user.sobrenome}',
+  email = '${user.email}',
+  salario = ${user.salario}
+  where (id_cliente = ${id});`
+  connection.query(
+    sql, function (err, results, fields) {
+      if(err) res.status(500).send(err)
+      else res.send(results)
+    }
+  )
+});
+
+app.delete('/cliente/:id', (req, res) => {
+  var id = req.params.id
+  var sql = `delete from cliente where (id_cliente = ${id});`;
+  connection.query(
+    sql, function (err, results, fields) {
+      if(err) res.status(500).send(err)
+      else res.send(results)
+    }
+  )
+});
+
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Backend listening on port ${port}`)
 })
