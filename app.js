@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
-  res.send(`Backend Wesley José Santos Rodando... (v${env.VERSION})`)
+  res.send(`Backend Wesley José Santos Rodando... (v${env.VERSION}-${env.ENV})`)
 })
 
 app.post('/cliente', (req, res) => {
