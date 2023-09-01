@@ -1,12 +1,9 @@
 const express = require('express')
-const dotenv = require('dotenv')
 const mysql = require('mysql2');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const env = require('./env_prod.js');
 
 const app = express()
-const env = process.env
-
-dotenv.config({ path: `.env.${env.NODE_ENV || 'local'}` })
 
 const port = env.PORT
 const connection = mysql.createConnection({
