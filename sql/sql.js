@@ -1,5 +1,5 @@
 const mysql = require('mysql2');
-const env = require('../env_prod.js');
+const env = require('../env.js');
 
 const db = mysql.createConnection({
     host: env.DB_HOST,
