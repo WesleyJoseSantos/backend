@@ -2,7 +2,7 @@ const package = require('./package.json')
 const express = require('express')
 const bodyParser = require('body-parser')
 const formData = require('express-form-data')
-const env = require('./env_prod.js')
+const env = require('./env.js')
 const app = express()
 
 const cliente = require('./routes/cliente.js')
