@@ -16,3 +16,8 @@ All notable changes to this project will be documented in this file.
 
 # Changed
  - Implement 'fornecedor' CRUD
+
+[0.4.0] - 2023-09-22
+
+# Changed
+ - Enable CORS
