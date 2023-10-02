@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-const file = fs.readFileSync('env.prod.json', 'utf-8')
+const file = fs.readFileSync(process.argv[2] ?? 'env.prod.json', 'utf-8')
 
 const obj = JSON.parse(file)
 
