@@ -24,7 +24,7 @@ app.use(cors(corsOpt))
 
 app.use('/', cliente)
 app.use('/', fornecedor)
-app.use(express.static('uploads'))
+app.use('/images/', express.static('uploads'))
 
 app.get('/', (req, res) => {
   res.send({
