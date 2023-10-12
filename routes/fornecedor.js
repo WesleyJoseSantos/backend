@@ -26,7 +26,7 @@ router.post('/fornecedor', (req, res) => {
                 var caminhoTemp = req.files.avatar.path
                 var caminhoNovo = `./uploads/fornecedor/${results.insertId}.png`
                 fs.copyFile(caminhoTemp, caminhoNovo, (err) => {
-                    if(err) res.status(500).send(err)
+                    if (err) res.status(500).send(err)
                     else res.send(results)
                 })
             }
@@ -74,7 +74,7 @@ router.patch('/fornecedor/:id', (req, res) => {
                 var caminhoTemp = req.files.avatar.path
                 var caminhoNovo = `./uploads/fornecedor/${results.insertId}.png`
                 fs.copyFile(caminhoTemp, caminhoNovo, (err) => {
-                    if(err) res.status(500).send(err)
+                    if (err) res.status(500).send(err)
                     else res.send(results)
                 })
             }
@@ -88,7 +88,18 @@ router.delete('/fornecedor/:id', (req, res) => {
     db.query(
         sql, function (err, results, fields) {
             if (err) res.status(500).send(err)
-            else res.send(results)
+            else {
+                var file = `./uploads/fornecedor/${id}.png`
+                if (fs.existsSync(file)) {
+                    fs.unlink(file, (err) => {
+                        if (err) res.status(500).send(err)
+                        else res.send(results)
+                    })
+                }
+                else {
+                    res.send(results)
+                }
+            }
         }
     )
 });
