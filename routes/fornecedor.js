@@ -23,12 +23,19 @@ router.post('/fornecedor', (req, res) => {
         sql, function (err, results, fields) {
             if (err) res.status(500).send(err)
             else {
-                var caminhoTemp = req.files.avatar.path
-                var caminhoNovo = `./uploads/fornecedor/${results.insertId}.png`
-                fs.copyFile(caminhoTemp, caminhoNovo, (err) => {
-                    if (err) res.status(500).send(err)
-                    else res.send(results)
-                })
+                if(req.files.avatar != undefined)
+                {
+                    var caminhoTemp = req.files.avatar.path
+                    var caminhoNovo = `./uploads/fornecedor/${results.insertId}.png`
+                    fs.copyFile(caminhoTemp, caminhoNovo, (err) => {
+                        if (err) res.status(500).send(err)
+                        else res.send(results)
+                    })
+                }
+                else
+                {
+                    res.send(results)
+                }
             }
         }
     )
@@ -71,12 +78,19 @@ router.patch('/fornecedor/:id', (req, res) => {
         sql, function (err, results, fields) {
             if (err) res.status(500).send(err)
             else {
-                var caminhoTemp = req.files.avatar.path
-                var caminhoNovo = `./uploads/fornecedor/${results.insertId}.png`
-                fs.copyFile(caminhoTemp, caminhoNovo, (err) => {
-                    if (err) res.status(500).send(err)
-                    else res.send(results)
-                })
+                if(req.files.avatar != undefined)
+                {
+                    var caminhoTemp = req.files.avatar.path
+                    var caminhoNovo = `./uploads/fornecedor/${results.insertId}.png`
+                    fs.copyFile(caminhoTemp, caminhoNovo, (err) => {
+                        if (err) res.status(500).send(err)
+                        else res.send(results)
+                    })
+                }
+                else
+                {
+                    res.send(results)
+                }
             }
         }
     )
