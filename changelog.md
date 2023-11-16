@@ -21,3 +21,9 @@ All notable changes to this project will be documented in this file.
 
 # Changed
  - Enable CORS
+
+
+[0.5.0] - 2023-11-16
+
+# Changed
+ - Generic CORS configuration

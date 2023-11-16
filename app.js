@@ -17,7 +17,7 @@ app.use(formData.parse())
 app.use(bodyParser.json())
 
 corsOpt = {
-  origin: 'http://localhost:5173',
+  origin: '*',
   optionsSuccessStatus: 200,
 }
 app.use(cors(corsOpt))

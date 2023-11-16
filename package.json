@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "0.4.0",
-  "description": "tarefa 1 backend",
+  "description": "Backend CEFET Web I",
   "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js env.local.json",
